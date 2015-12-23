@@ -15,8 +15,12 @@ class ViewController: UIViewController {
     
     var userIsInTheMiddleOfTyping: Bool = false
 
+    // Append digit to display text
     @IBAction func appendDigit(sender: UIButton) {
         let digit = sender.currentTitle!
+        
+        /* unwrap display text and append digit 
+           else add digit to screen then do above */
         if userIsInTheMiddleOfTyping {
             display.text = display.text! + digit
         } else {
@@ -26,13 +30,18 @@ class ViewController: UIViewController {
 
     }
     
+    // Operator functions
     @IBAction func operate(sender: UIButton) {
+        
+        // Get operand
         let operation = sender.currentTitle!
         
+        // Automatically enter for user on calculator
         if userIsInTheMiddleOfTyping {
             enter()
         }
         
+        // Do operations, short-hand due to type inference
         switch operation {
         case "×": performOperation { $0 * $1 }
         case "÷": performOperation { $1 / $0 }
@@ -42,6 +51,7 @@ class ViewController: UIViewController {
         }
     }
     
+    // Remove digits from stack and perform operations
     func performOperation(operation: (Double, Double) -> Double) {
         if operandStack.count >= 2 {
             displayValue = operation(operandStack.removeLast(), operandStack.removeLast())
@@ -49,13 +59,16 @@ class ViewController: UIViewController {
         }
     }
     
+    // Create Double array
     var operandStack = Array<Double>()
 
+    // Add digit to stack
     @IBAction func enter() {
         userIsInTheMiddleOfTyping = false
         operandStack.append(displayValue)
     }
     
+    // Format string to digit and add to display
     var displayValue: Double {
         get {
             return NSNumberFormatter().numberFromString(display.text!)!.doubleValue
