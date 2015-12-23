@@ -41,7 +41,9 @@ class ViewController: UIViewController {
             enter()
         }
         
-        // Do operations, short-hand due to type inference
+        /* Do operations, short-hand due to type inference
+           Can do () after performOperation but don't need to due 
+           to only one argument from func performOperation */
         switch operation {
         case "×": performOperation { $0 * $1 }
         case "÷": performOperation { $1 / $0 }
