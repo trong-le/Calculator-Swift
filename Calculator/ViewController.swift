@@ -14,6 +14,10 @@ class ViewController: UIViewController {
     @IBOutlet weak var display: UILabel!
     
     var userIsInTheMiddleOfTyping: Bool = false
+    
+    /* Arrow from controller to model
+       Connects the two together */
+    var brain = CalculatorBrain()
 
     // Append digit to display text
     @IBAction func appendDigit(sender: UIButton) {
@@ -33,52 +37,21 @@ class ViewController: UIViewController {
     // Operator functions
     @IBAction func operate(sender: UIButton) {
         
-        // Get operand
-        let operation = sender.currentTitle!
-        
         // Automatically enter for user on calculator
         if userIsInTheMiddleOfTyping {
             enter()
         }
         
-        /* Do operations, short-hand due to type inference
-           Can do () after performOperation but don't need to due 
-           to only one argument from func performOperation */
-        switch operation {
-        case "×": performOperation { $0 * $1 }
-        case "÷": performOperation { $1 / $0 }
-        case "+": performOperation { $0 + $1 }
-        case "−": performOperation { $1 - $0 }
-        case "√": performOperation { sqrt($0) }
-        default: break
+        if let operation = sender.currentTitle {
         }
     }
     
-    /* Remove digits from stack and perform operations for 2
-       arguments */
-    func performOperation(operation: (Double, Double) -> Double) {
-        if operandStack.count >= 2 {
-            displayValue = operation(operandStack.removeLast(), operandStack.removeLast())
-            enter()
-        }
-    }
     
-    /* Remove digits from stack and perform operations for
-       1 operation */
-    private func performOperation(operation: Double -> Double) {
-        if operandStack.count >= 1 {
-            displayValue = operation(operandStack.removeLast())
-            enter()
-        }
-    }
-    
-    // Create Double array
-    var operandStack = Array<Double>()
 
     // Add digit to stack
     @IBAction func enter() {
         userIsInTheMiddleOfTyping = false
-        operandStack.append(displayValue)
+        brain.pushOperand(displayValue)
     }
     
     // Format string to digit and add to display
