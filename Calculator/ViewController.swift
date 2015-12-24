@@ -15,7 +15,7 @@ class ViewController: UIViewController {
     
     var userIsInTheMiddleOfTyping: Bool = false
     
-    /* Arrow from controller to model
+    /* Arrow from controller to mod el
        Connects the two together */
     var brain = CalculatorBrain()
 
@@ -43,6 +43,11 @@ class ViewController: UIViewController {
         }
         
         if let operation = sender.currentTitle {
+            if let result = brain.performOperation(operation) {
+                displayValue = result
+            } else {
+                displayValue = 0
+            }
         }
     }
     
@@ -51,7 +56,11 @@ class ViewController: UIViewController {
     // Add digit to stack
     @IBAction func enter() {
         userIsInTheMiddleOfTyping = false
-        brain.pushOperand(displayValue)
+        if let result = brain.pushOperand(displayValue) {
+            displayValue = result
+        } else {
+            displayValue = 0
+        }
     }
     
     // Format string to digit and add to display
